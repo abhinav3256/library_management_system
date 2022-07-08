@@ -11,12 +11,7 @@ var records = readCsvFile("./books.csv")
 
 func importCSV() {
 
-	//var result = true
-	//	records=Book{}
-
 	for i := 1; i < 1000; i++ {
-
-		//fmt.Println(records[i][j])
 
 		sqlStatement := `
 INSERT INTO books(book_id,book_name, book_author, book_cover_image)
