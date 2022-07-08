@@ -9,9 +9,10 @@ import (
 )
 
 func Signup(c *gin.Context) {
+
 	reqBody := User{}
 	err := c.Bind(&reqBody)
-
+	login(reqBody)
 	if err != nil {
 		res := gin.H{
 			"error": parseError(err),
@@ -21,8 +22,13 @@ func Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
-
-	result, result_err := InsertInDB(reqBody)
+	var user_type int
+	if c.Request.URL.Path == "/signup/admin" {
+		user_type = 1
+	} else {
+		user_type = 2
+	}
+	result, result_err := InsertInDB(reqBody, user_type)
 	if result_err != "" {
 		res := gin.H{
 			"error":   result_err,
@@ -42,14 +48,15 @@ func Signup(c *gin.Context) {
 	return
 }
 
-func InsertInDB(reqbody User) (bool, string) {
+func InsertInDB(reqbody User, user_type int) (bool, string) {
 	var result = true
 	var err_responce = ""
+
 	sqlStatement := `
 INSERT INTO users(first_name, last_name,email, password, type)
 VALUES ($1, $2, $3, $4,$5)`
-	_, err2 := DB.Exec(sqlStatement, reqbody.First_name, reqbody.Last_name, reqbody.Email, reqbody.Password, 2)
-	fmt.Println(err2)
+	_, err2 := DB.Exec(sqlStatement, reqbody.First_name, reqbody.Last_name, reqbody.Email, reqbody.Password, user_type)
+	//fmt.Println(err2)
 	if err2 != nil {
 		err := UniqueViolation(err2)
 		if err != nil {
