@@ -34,5 +34,7 @@ func setupRoutes(r *gin.Engine) {
 
 	r.POST("signup/admin", Signup)
 	r.POST("signup/user", Signup)
+	r.POST("login", login)
+	r.POST("logout", logout)
 
 }

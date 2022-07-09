@@ -12,7 +12,7 @@ func Signup(c *gin.Context) {
 
 	reqBody := User{}
 	err := c.Bind(&reqBody)
-	login(reqBody)
+
 	if err != nil {
 		res := gin.H{
 			"error": parseError(err),

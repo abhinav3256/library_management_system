@@ -1,18 +1,63 @@
 package main
 
 import (
-	"fmt"
-	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func login(reqBody User) {
-	var count int
-	row := DB.QueryRow("SELECT COUNT(*) FROM users")
-	err := row.Scan(&count)
+func login(c *gin.Context) {
+	reqBody := User{}
+	err := c.Bind(&reqBody)
+
 	if err != nil {
-		log.Fatal(err)
+		res := gin.H{
+			"error": parseError(err),
+		}
+		//c.Writer.Header().Set("Content-Type", "application/json")
+
+		c.JSON(http.StatusBadRequest, res)
+		return
 	}
 
-	fmt.Println(count)
+	result := check_auth(reqBody)
+
+	if result == true {
+		c.SetCookie("email", reqBody.Email, 60*60, "", "", false, false)
+		c.Header("result", reqBody.Email)
+		res := gin.H{
+			"success": true,
+			"message": "Login Successfull",
+		}
+		c.JSON(http.StatusOK, res)
+
+		return
+	} else {
+		res := gin.H{
+			"success": false,
+			"message": "Invalid  Credential",
+		}
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
+}
+
+func check_auth(reqBody User) bool {
+	var count int
+
+	userSQL := "SELECT COUNT(*) FROM users WHERE email=$1 AND password=$2"
+
+	row := DB.QueryRow(userSQL, reqBody.Email, reqBody.Password)
+	err := row.Scan(&count)
+	if err != nil {
+		//log.Fatal(err)
+	}
+
+	if count == 1 {
+		return true
+	} else {
+		return false
+	}
 
 }
