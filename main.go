@@ -17,6 +17,18 @@ type User struct {
 	Last_name  string `json:"last_name"`
 	Email      string `json:"email" binding:"email"`
 	Password   string `json:"password" binding:"required,min=8,alphanum"`
+	Type       string `json:"type"`
+}
+
+type Order struct {
+	ID                 int    `json:"id"`
+	Book_id            string `json:"book_id"`
+	Student_id         int    `json:"student_id"`
+	Issue_date         string `json:"issue_date"`
+	Return_date        string `json:"return_date"`
+	Actual_return_date string `json:"actual_return_date"`
+	Fine               string `json:"fine"`
+	Approved           string `json:"approved"`
 }
 
 func main() {
@@ -36,5 +48,9 @@ func setupRoutes(r *gin.Engine) {
 	r.POST("signup/user", Signup)
 	r.POST("login", login)
 	r.POST("logout", logout)
+
+	r.GET("/orders", isLogin(), orderHandler)
+
+	r.POST("/order", isLogin(), orderRequest)
 
 }

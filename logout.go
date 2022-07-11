@@ -8,7 +8,7 @@ import (
 
 func logout(c *gin.Context) {
 
-	c.SetCookie("email", "", 0, "", "", false, false)
+	c.SetCookie("id", "", -1, "", "", false, false)
 	res := gin.H{
 		"success": true,
 		"message": "logout successfull",

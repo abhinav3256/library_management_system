@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,8 +24,9 @@ func login(c *gin.Context) {
 	result := check_auth(reqBody)
 
 	if result == true {
-		c.SetCookie("email", reqBody.Email, 60*60, "", "", false, false)
-		c.Header("result", reqBody.Email)
+		user_data := getUserByEmail(reqBody.Email)
+		c.SetCookie("id", strconv.Itoa(user_data.Id), 60*60, "", "", false, false)
+		//c.Header("result", reqBody.Email)
 		res := gin.H{
 			"success": true,
 			"message": "Login Successfull",
