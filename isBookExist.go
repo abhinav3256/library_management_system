@@ -3,7 +3,7 @@ package main
 func isBookExist(bookId string) bool {
 	var count int
 
-	userSQL := "SELECT current_stock FROM books WHERE book_id=$1"
+	userSQL := "SELECT COUNT(*) FROM books WHERE book_id=$1"
 
 	row := DB.QueryRow(userSQL, bookId)
 	err := row.Scan(&count)
