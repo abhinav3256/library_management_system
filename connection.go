@@ -14,7 +14,7 @@ const (
 	DB_DSN = "postgres://postgres:abhinav@localhost:5432/lms?sslmode=disable"
 )
 
-func createDBConnection() {
+func CreateDBConnection() {
 	var err error
 	DB, err = sql.Open("postgres", DB_DSN)
 	if err != nil {

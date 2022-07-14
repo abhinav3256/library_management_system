@@ -9,7 +9,7 @@ import (
 )
 
 func orderRequest(c *gin.Context) {
-	reqBody := Order{}
+	reqBody := Order_request{}
 	err := c.Bind(&reqBody)
 
 	if err != nil {
@@ -86,15 +86,15 @@ func orderRequest(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func createOrderRequest(reqbody Order) (bool, string) {
+func createOrderRequest(reqbody Order_request) (bool, string) {
 	var result = true
 	var err_responce = ""
 	var approved = "pending"
 
 	sqlStatement := `
-INSERT INTO order_request(book_id, student_id,issue_date, return_date, actual_return_date, approved)
-VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err2 := DB.Exec(sqlStatement, reqbody.Book_id, reqbody.Student_id, reqbody.Issue_date, reqbody.Return_date, reqbody.Actual_return_date, approved)
+INSERT INTO order_request(book_id, student_id,issue_date, return_date, approved)
+VALUES ($1, $2, $3, $4, $5)`
+	_, err2 := DB.Exec(sqlStatement, reqbody.Book_id, reqbody.Student_id, reqbody.Issue_date, reqbody.Return_date, approved)
 	fmt.Println(err2)
 
 	if err2 != nil {

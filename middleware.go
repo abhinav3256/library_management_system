@@ -44,3 +44,47 @@ func isLogin() gin.HandlerFunc {
 
 	}
 }
+
+func isAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// middleware
+		cookie_id, err := c.Cookie("id")
+		fmt.Println("cookie value: ", cookie_id)
+
+		if err != nil || cookie_id == "" {
+
+			fmt.Println(err)
+			res := gin.H{
+				"message": "Access denied",
+			}
+			c.JSON(http.StatusBadRequest, res)
+			c.Abort()
+			return
+		}
+		id, err2 := strconv.Atoi(cookie_id)
+		if err2 != nil {
+
+			fmt.Println(err)
+			res := gin.H{
+				"message": "Access denied",
+			}
+			c.JSON(http.StatusBadRequest, res)
+			c.Abort()
+			return
+		}
+		data := getUserByID(id)
+		CurrentUser["currentUser"] = data
+
+		if CurrentUser["currentUser"].Type != 1 {
+
+			fmt.Println(err)
+			res := gin.H{
+				"message": "Access denied",
+			}
+			c.JSON(http.StatusBadRequest, res)
+			c.Abort()
+			return
+		}
+
+	}
+}

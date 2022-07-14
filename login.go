@@ -1,14 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
+type Login struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func login(c *gin.Context) {
-	reqBody := User{}
+	reqBody := Login{}
 	err := c.Bind(&reqBody)
 
 	if err != nil {
@@ -45,7 +51,8 @@ func login(c *gin.Context) {
 
 }
 
-func check_auth(reqBody User) bool {
+func check_auth(reqBody Login) bool {
+
 	var count int
 
 	userSQL := "SELECT COUNT(*) FROM users WHERE email=$1 AND password=$2"
@@ -55,7 +62,7 @@ func check_auth(reqBody User) bool {
 	if err != nil {
 		//log.Fatal(err)
 	}
-
+	fmt.Println("c", count)
 	if count == 1 {
 		return true
 	} else {

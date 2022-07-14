@@ -6,7 +6,9 @@ func isBookExist(bookId string) bool {
 	userSQL := "SELECT COUNT(*) FROM books WHERE book_id=$1"
 
 	row := DB.QueryRow(userSQL, bookId)
+
 	err := row.Scan(&count)
+
 	if err != nil {
 		//log.Fatal(err)
 	}
