@@ -83,20 +83,44 @@ func setupRoutes(r *gin.Engine) {
 	r.POST("login", login)
 	r.POST("logout", logout)
 
-	r.GET("/orders", isLogin(), orderHandler)
-	r.GET("/orders/history", isLogin(), orderHistoryHandler)
+// 	r.GET("/orders", isLogin(), orderHandler)
+// 	r.GET("/orders/history", isLogin(), orderHistoryHandler)
 
-	r.POST("/order", isLogin(), orderRequest)
+// 	r.POST("/order", isLogin(), orderRequest)
 
-	r.POST("/order/return", isLogin(), order_return)
+// 	r.POST("/order/return", isLogin(), order_return)
 
-	r.GET("/search/:name", isLogin(), searchHandler)
+// 	r.GET("/search/:name", isLogin(), searchHandler)
+
+// 	//ADMIN
+// 	r.POST("/return/approve", isAdmin(), ReturnAccept)
+
+// 	r.POST("/order/approve", isAdmin(), Order_approve)
+
+// 	r.GET("/order/return", isAdmin(), OrderReturn)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	r.GET("/orders", orderHandler)
+	r.GET("/orders/history", orderHistoryHandler)
+
+	r.POST("/order",  orderRequest)
+
+	r.POST("/order/return",  order_return)
+
+	r.GET("/search/:name",  searchHandler)
 
 	//ADMIN
-	r.POST("/return/approve", isAdmin(), ReturnAccept)
+	r.POST("/return/approve",  ReturnAccept)
 
-	r.POST("/order/approve", isAdmin(), Order_approve)
+	r.POST("/order/approve",  Order_approve)
 
-	r.GET("/order/return", isAdmin(), OrderReturn)
+	r.GET("/order/return",  OrderReturn)
 
 }
